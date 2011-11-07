@@ -7,11 +7,11 @@
 <script type="text/javascript">
   
   var coords = {
-    "40.709473 -74.01125100000002" : "images/1.jpg",
-    "40.709418 -74.01112799999999" : "images/2.jpg",
-    "40.709363 -74.01100600000001" : "images/3.jpg",
-    "40.709519 -74.01135299999999" : "images/4.jpg",
-    "40.709578 -74.011485"         : "images/5.jpg",
+    "40.709473 -74.01125100000002" : ["images/1.jpg", "Bro, this protest is totally nuts! #thingsthataretotallynuts"],
+    "40.709418 -74.01112799999999" : ["images/2.jpg", "Pretty cool, there's like medical stuff and shit"],
+    "40.709363 -74.01100600000001" : ["images/3.jpg", "Lots of friendly protesters in the park!"],
+    "40.709519 -74.01135299999999" : ["images/4.jpg", "MAD CLOTHES AND BLANKETS. #sleeponallthethings"],
+    "40.709578 -74.011485"         : ["images/5.jpg", "Just a guy texting on a soapbox, nbd. #itreallyisntabd"],
   };
   
   function initialize() {
@@ -29,14 +29,16 @@
     google.maps.event.addListener(panorama, 'position_changed', function() {
          position = panorama.getPosition();
          concatPos = position['Oa'] + " " + position['Pa'];
-         $("#overlay").attr("src", coords[concatPos]);
+         $("#overlay").attr("src", coords[concatPos][0]);
+         $("#tweet").html(coords[concatPos][1]);
      });
   }
 </script>
 </head>
 <body onload="initialize()">
   <div id="pano" style="width: 1200px; height: 600px;"></div>
-  <img id="overlay" src="images/1.jpg"/>
+  <img id="overlay" src=""/>
+  <div id="tweet"></div>
 </body>
 </html>
 
