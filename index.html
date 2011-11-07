@@ -2,9 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
 <script src="//maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
 <script type="text/javascript">
-
+  
+  var coords = {
+    "40.709473 -74.01125100000002" : "images/1.jpg",
+    "40.709418 -74.01112799999999" : "images/2.jpg",
+    "40.709363 -74.01100600000001" : "images/3.jpg",
+    "40.709519 -74.01135299999999" : "images/4.jpg",
+    "40.709578 -74.011485"         : "images/5.jpg",
+  };
+  
   function initialize() {
     var zuccotti = new google.maps.LatLng(40.709385,-74.011323);
     var panoramaOptions = {
@@ -16,12 +25,18 @@
       }
     };
     var panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"),panoramaOptions);
-    map.setStreetView(panorama);
+    
+    google.maps.event.addListener(panorama, 'position_changed', function() {
+         position = panorama.getPosition();
+         concatPos = position['Oa'] + " " + position['Pa'];
+         $("#overlay").attr("src", coords[concatPos]);
+     });
   }
 </script>
 </head>
 <body onload="initialize()">
   <div id="pano" style="width: 1200px; height: 600px;"></div>
+  <img id="overlay" src="images/1.jpg"/>
 </body>
 </html>
 
