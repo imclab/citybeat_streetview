@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<script src="//maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<script type="text/javascript">
+
+  function initialize() {
+    var zuccotti = new google.maps.LatLng(40.709385,-74.011323);
+    var panoramaOptions = {
+      position: zuccotti,
+      pov: {
+        heading: 34,
+        pitch: 10,
+        zoom: 1
+      }
+    };
+    var panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"),panoramaOptions);
+    map.setStreetView(panorama);
+  }
+</script>
+</head>
+<body onload="initialize()">
+  <div id="pano" style="width: 1200px; height: 600px;"></div>
+</body>
+</html>
+
+
