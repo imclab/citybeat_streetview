@@ -14,8 +14,20 @@
     "40.709578 -74.011485"         : ["images/5.jpg", "Just a guy texting on a soapbox, nbd. #itreallyisntabd"],
   };
   
+  var blah = {
+    0 : ["40.709473", "-74.01125100000002", "images/1.jpg", "Bro, this protest is totally nuts! #thingsthataretotallynuts"],
+    1 : ["40.709418"," -74.01112799999999","images/2.jpg", "Pretty cool, there's like medical stuff and shit"],
+    2 : ["40.709363", "-74.01100600000001", "images/3.jpg", "Lots of friendly protesters in the park!"],
+    3 : ["40.709519", "-74.01135299999999", "images/4.jpg", "MAD CLOTHES AND BLANKETS. #sleeponallthethings"],
+    4 : ["40.709578", "-74.011485","images/5.jpg", "Just a guy texting on a soapbox, nbd. #itreallyisntabd"],
+  }
+
+  var sv = new google.maps.StreetViewService();  
+  var panorama;
+  var zuccotti;
+  
   function initialize() {
-    var zuccotti = new google.maps.LatLng(40.709385,-74.011323);
+    zuccotti = new google.maps.LatLng(40.709385,-74.011323);
     var panoramaOptions = {
       position: zuccotti,
       pov: {
@@ -24,15 +36,42 @@
         zoom: 1
       }
     };
-    var panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"),panoramaOptions);
-    
+    panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"),panoramaOptions);
     google.maps.event.addListener(panorama, 'position_changed', function() {
          position = panorama.getPosition();
-         concatPos = position['Oa'] + " " + position['Pa'];
+         concatPos = position['Pa'] + " " + position['Qa'];
          $("#overlay").attr("src", coords[concatPos][0]);
          $("#tweet").html(coords[concatPos][1]);
      });
   }
+  
+  
+  var setPanorama = function(lat, lng){
+   zuccotti = new google.maps.LatLng(lat,lng);
+   sv.getPanoramaByLocation(zuccotti, 50, processSVData);
+  }
+    
+  var processSVData = function(data, status) {
+      if (google.maps.StreetViewStatus.OK) {    
+        console.log(data)
+        panorama.setPano(data.location.pano);
+        panorama.setPov({
+          heading: 270,
+          pitch: 0,
+          zoom: 1
+        });
+        panorama.setVisible(true);
+      }
+   }
+   
+   var loop = function(index){
+     (index == 4) ? index = 0 : index++;
+     setPanorama(blah[index][0], blah[index][1])
+     setTimeout(function(){loop(index)}, 2000);  
+   }
+   
+   loop(0)
+   
 </script>
 </head>
 <body onload="initialize()">
