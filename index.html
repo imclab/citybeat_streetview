@@ -10,7 +10,6 @@
 
 var tweet_set;
 var tweet_check;
-var timeout;
 
 function search_twitter(q, page){
 	q += " instagr filter:links";
@@ -18,13 +17,10 @@ function search_twitter(q, page){
 	    url : "http://search.twitter.com/search.json?q="+escape(q)+"&page="+page+"&rpp=100&callback=?",
     	dataType: "json",
 			success : function(data){
-			  if (data.results.length == 0){
-        		console.log("got nothing.")
-        }
-
     		var urls = new Array();
     		var tweets = new Array();
-
+        if (!data.results) return false;
+        
 	      //get the image url and status
     		for (i=0;i<data.results.length;i++){
     			var obj = data.results[i];    			
@@ -106,7 +102,14 @@ var loop = function(index){
  setPanorama(tweet_set[index][0], tweet_set[index][1])
  $("#overlay").attr("src", tweet_set[index][2]);
  $("#tweet").html(tweet_set[index][3]);
- timeout = setTimeout(function(){loop(index)}, 2000);  
+ setTimeout(function(){loop(index)}, 2000);  
+}
+
+var countdown = function(timeLeft){
+  console.log(timeLeft / 1000 + "..")
+  if (timeLeft - 1000 > 0){
+    setTimeout(function(){countdown(timeLeft - 1000)}, 1000);  
+  }
 }
 
 var scrape = function(q){
@@ -116,6 +119,7 @@ var scrape = function(q){
     search_twitter(q, i);
   }
   //UGLY UGLY UGLY
+  countdown(5000);
   setTimeout(function(){loop(0)}, 5000);  
 }
 
