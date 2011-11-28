@@ -4,73 +4,116 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
 <script src="//maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
-<script type="text/javascript">
-  
-  var coords = {
-    "40.709473 -74.01125100000002" : ["images/1.jpg", "Bro, this protest is totally nuts! #thingsthataretotallynuts"],
-    "40.709418 -74.01112799999999" : ["images/2.jpg", "Pretty cool, there's like medical stuff and shit"],
-    "40.709363 -74.01100600000001" : ["images/3.jpg", "Lots of friendly protesters in the park!"],
-    "40.709519 -74.01135299999999" : ["images/4.jpg", "MAD CLOTHES AND BLANKETS. #sleeponallthethings"],
-    "40.709578 -74.011485"         : ["images/5.jpg", "Just a guy texting on a soapbox, nbd. #itreallyisntabd"],
-  };
-  
-  var blah = {
-    0 : ["40.709473", "-74.01125100000002", "images/1.jpg", "Bro, this protest is totally nuts! #thingsthataretotallynuts"],
-    1 : ["40.709418"," -74.01112799999999","images/2.jpg", "Pretty cool, there's like medical stuff and shit"],
-    2 : ["40.709363", "-74.01100600000001", "images/3.jpg", "Lots of friendly protesters in the park!"],
-    3 : ["40.709519", "-74.01135299999999", "images/4.jpg", "MAD CLOTHES AND BLANKETS. #sleeponallthethings"],
-    4 : ["40.709578", "-74.011485","images/5.jpg", "Just a guy texting on a soapbox, nbd. #itreallyisntabd"],
-  }
+<script src="http://scripts.embed.ly/jquery.embedly.min.js" type="text/javascript"></script>
 
-  var sv = new google.maps.StreetViewService();  
-  var panorama;
-  var zuccotti;
+<script type="text/javascript">
+
+query = "zuccotti";
+
+var tweet_set = new Array();
+var tweet_check = []
+
+function search_twitter(q, page){
+	q += " instagr filter:links";
+	$.ajax({
+	    url : "http://search.twitter.com/search.json?q="+escape(q)+"&page="+page+"&rpp=100&callback=?",
+    	dataType: "json",
+			success : function(data){
+			  if (data.results.length == 0){
+        		console.log("got nothing.")
+        }
+
+    		var urls = new Array();
+    		var tweets = new Array();
+
+	      //get the image url and status
+    		for (i=0;i<data.results.length;i++){
+    			var obj = data.results[i];    			
+    			if (obj['geo'] == null) continue;
+    			var p = obj.text.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
+
+    			if (p != null){
+    				var u = p[0].replace(' ', '');
+    				var idx = urls.length;
+    				urls[idx] = u;
+    				tweets[idx] = obj;
+    			}
+    		}
+	
+        //call embedly and build display
+				var counter = 0;
+				$.embedly(urls, {maxWidth:500, key : '4eff5eecc9d811e083104040d3dc5c07' },
+					function(oembed){					
+						if (oembed != null && oembed.type == "photo"){
+							build_display(oembed, tweets[counter]);
+						}
+						counter++;
+				});
+    	}
+  });
+}
+
+function build_display(oembed, status){
+	tweet = [
+	  String(status['geo']['coordinates'][0]),
+	  String(status['geo']['coordinates'][1]),
+	  oembed['url'],
+	  status['text']
+	];
+	
+	if($.inArray(status['text'], tweet_check) == -1){
+	  tweet_set.push(tweet);
+	  tweet_check.push(status['text'])
+	}
+}
+
+for (i = 0; i < 5; i++){
+  search_twitter(query, i);
+}
+
+var sv = new google.maps.StreetViewService();  
+var panorama;
+var zuccotti;
+
+function initialize() {
+  zuccotti = new google.maps.LatLng(40.709385,-74.011323);
+  var panoramaOptions = {
+    position: zuccotti,
+    pov: {
+      heading: 34,
+      pitch: 10,
+      zoom: 1
+    }
+  };
+  panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"),panoramaOptions);
+}
+
+var setPanorama = function(lat, lng){
+ zuccotti = new google.maps.LatLng(lat,lng);
+ sv.getPanoramaByLocation(zuccotti, 50, processSVData);
+}
   
-  function initialize() {
-    zuccotti = new google.maps.LatLng(40.709385,-74.011323);
-    var panoramaOptions = {
-      position: zuccotti,
-      pov: {
-        heading: 34,
-        pitch: 10,
+var processSVData = function(data, status) {
+    if (google.maps.StreetViewStatus.OK) {
+      panorama.setPano(data.location.pano);
+      panorama.setPov({
+        heading: 270,
+        pitch: 0,
         zoom: 1
-      }
-    };
-    panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"),panoramaOptions);
-    google.maps.event.addListener(panorama, 'position_changed', function() {
-         position = panorama.getPosition();
-         concatPos = position['Pa'] + " " + position['Qa'];
-         $("#overlay").attr("src", coords[concatPos][0]);
-         $("#tweet").html(coords[concatPos][1]);
-     });
-  }
-  
-  
-  var setPanorama = function(lat, lng){
-   zuccotti = new google.maps.LatLng(lat,lng);
-   sv.getPanoramaByLocation(zuccotti, 50, processSVData);
-  }
-    
-  var processSVData = function(data, status) {
-      if (google.maps.StreetViewStatus.OK) {    
-        console.log(data)
-        panorama.setPano(data.location.pano);
-        panorama.setPov({
-          heading: 270,
-          pitch: 0,
-          zoom: 1
-        });
-        panorama.setVisible(true);
-      }
-   }
-   
-   var loop = function(index){
-     (index == 4) ? index = 0 : index++;
-     setPanorama(blah[index][0], blah[index][1])
-     setTimeout(function(){loop(index)}, 2000);  
-   }
-   
-   loop(0)
+      });
+      panorama.setVisible(true);
+    }
+ }
+
+var loop = function(index){
+ (index == tweet_set.length - 1) ? index = 0 : index++;
+ setPanorama(tweet_set[index][0], tweet_set[index][1])
+ $("#overlay").attr("src", tweet_set[index][2]);
+ $("#tweet").html(tweet_set[index][3]);
+ setTimeout(function(){loop(index)}, 2000);  
+}
+
+setTimeout(function(){loop(0)}, 5000);
    
 </script>
 </head>
