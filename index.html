@@ -88,12 +88,19 @@ var setPanorama = function(lat, lng){
 }
 
 var timer;
+var show_seconds = 6000;
 var loop = function(index){
   (index == tweet_set.length - 1) ? index = 0 : index++;
   setPanorama(tweet_set[index][0], tweet_set[index][1])
   $("#overlay").attr("src", tweet_set[index][2]);
   $("#tweet").html(tweet_set[index][3]);
-  timer = setTimeout(function(){loop(index)}, 3000);  
+  setTimeout(function(){
+    $('#curtain').fadeOut('fast');
+  }, 500);
+  setTimeout(function(){
+    $('#curtain').fadeIn('fast');
+  }, show_seconds - 500);
+  timer = setTimeout(function(){loop(index)}, show_seconds);  
 }
 
 var countdown = function(timeLeft){
@@ -116,20 +123,91 @@ var scrape = function(){
     search_twitter(q, i);
   }
   
-  countdown(5000);
-  setTimeout(function(){loop(0)}, 5000);  
+  countdown(show_seconds);
+  setTimeout(function(){loop(0)}, show_seconds);  
 }
 
 </script>
+<style type="text/css">
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  html, body {
+    height: 100%;
+    font-family:"Helvetica",Georgia,Serif;
+  }
+  #floater {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 3;
+  }
+  #tweet {
+    margin-top: 10px;
+    background-color: #ccc;
+    padding: 10px;
+    filter: alpha(opacity=70);
+    -khtml-opacity: 0.8;
+    -moz-opacity: 0.8;
+    opacity: 0.8; 
+    border: 1px solid #444;
+  }
+  #tweet, #overlay {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+  }
+  #overlay {
+    width: 400px;
+  }
+  #curtain {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #111;
+    z-index: 2;
+  }
+  #change_modal {
+    width: 476px;
+    padding: 12px;
+    position: absolute;
+    left: 50%;
+    top: 200px;
+    margin-left: -250px;
+    background-color: #efefef;
+    border: 1px solid #000;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    z-index: 3;
+  }
+  * {
+    margin: 0px;
+    padding: 0px;
+  }
+  h1,h2,h3,h4,h5,h6 {
+    line-height: 1.1em;
+  }
+  p, ul, ol {
+    line-height: 1.5em;
+  }
+  
+</style>
 </head>
 <body onload="initialize()">
-  <input id="queryInput" type="text"></input>
-  <input type="submit" onclick="scrape()"></input>
   <div id="queryDisplay"></div>
   <div id="countdown"></div>
-  <div id="pano" style="width: 1200px; height: 600px;"></div>
-  <img id="overlay" src=""/>
-  <div id="tweet"></div>
+  <div id="curtain"></div>
+  <div id="pano" style="width: 100%; height: 100%;"></div>
+  <div id="floater">
+    <img id="overlay"/>
+    <div id="tweet"></div>
+  </div>
+  <div id="change_modal">
+    <input id="queryInput" type="text"></input>
+    <input type="submit" onclick="scrape()"></input>
+  </div>
 </body>
 </html>
 
