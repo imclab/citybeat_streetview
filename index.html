@@ -97,13 +97,16 @@ var loop = function(index){
 }
 
 var countdown = function(timeLeft){
-  console.log(timeLeft / 1000 + "..")
+  tick = timeLeft / 1000 + "..";
+  $("#countdown").html(tick)
   if (timeLeft - 1000 > 0){
     setTimeout(function(){countdown(timeLeft - 1000)}, 1000);  
   }
 }
 
-var scrape = function(q){
+var scrape = function(){
+  q = $("#queryInput").val();
+  $("#queryDisplay").html(q);
   clearTimeout(timer);
   tweet_set = new Array()
   tweet_check = []
@@ -118,6 +121,10 @@ var scrape = function(q){
 </script>
 </head>
 <body onload="initialize()">
+  <input id="queryInput" type="text"></input>
+  <input type="submit" onclick="scrape()"></input>
+  <div id="queryDisplay"></div>
+  <div id="countdown"></div>
   <div id="pano" style="width: 1200px; height: 600px;"></div>
   <img id="overlay" src=""/>
   <div id="tweet"></div>
