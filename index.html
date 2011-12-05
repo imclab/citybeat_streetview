@@ -62,47 +62,38 @@ function build_display(oembed, status){
 	}
 }
 
-// streetview map
-var sv = new google.maps.StreetViewService();  
 var panorama;
-var zuccotti;
 
 function initialize() {
-  zuccotti = new google.maps.LatLng(40.709385,-74.011323);
+  latlng = new google.maps.LatLng(40.709385,-74.011323);
   var panoramaOptions = {
-    position: zuccotti,
+    position: latlng,
     pov: {
       heading: 34,
       pitch: 10,
       zoom: 1
-    }
+    },
+    panControl: false,
+    linksControl: false,
+    zoomControl: false,
+    addressControl: false,
+    scrollwheel: false,
   };
-  panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"),panoramaOptions);
+  panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
 }
 
 var setPanorama = function(lat, lng){
- zuccotti = new google.maps.LatLng(lat,lng);
- sv.getPanoramaByLocation(zuccotti, 50, processSVData);
+  latlng = new google.maps.LatLng((lat), (lng)) 
+  panorama.setPosition(latlng)
 }
-  
-var processSVData = function(data, status) {
-    if (google.maps.StreetViewStatus.OK) {
-      panorama.setPano(data.location.pano);
-      panorama.setPov({
-        heading: 270,
-        pitch: 0,
-        zoom: 1
-      });
-      panorama.setVisible(true);
-    }
- }
 
+var timer;
 var loop = function(index){
- (index == tweet_set.length - 1) ? index = 0 : index++;
- setPanorama(tweet_set[index][0], tweet_set[index][1])
- $("#overlay").attr("src", tweet_set[index][2]);
- $("#tweet").html(tweet_set[index][3]);
- setTimeout(function(){loop(index)}, 2000);  
+  (index == tweet_set.length - 1) ? index = 0 : index++;
+  setPanorama(tweet_set[index][0], tweet_set[index][1])
+  $("#overlay").attr("src", tweet_set[index][2]);
+  $("#tweet").html(tweet_set[index][3]);
+  timer = setTimeout(function(){loop(index)}, 3000);  
 }
 
 var countdown = function(timeLeft){
@@ -113,12 +104,13 @@ var countdown = function(timeLeft){
 }
 
 var scrape = function(q){
+  clearTimeout(timer);
   tweet_set = new Array()
   tweet_check = []
-  for (i = 0; i < 5; i++){
+  for (i = 0; i < 15; i++){
     search_twitter(q, i);
   }
-  //UGLY UGLY UGLY
+  
   countdown(5000);
   setTimeout(function(){loop(0)}, 5000);  
 }
