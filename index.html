@@ -101,6 +101,8 @@ var countdown = function(timeLeft){
   $("#countdown").html(tick)
   if (timeLeft - 1000 > 0){
     setTimeout(function(){countdown(timeLeft - 1000)}, 1000);  
+  } else{
+    $("#countdown").html("")
   }
 }
 
