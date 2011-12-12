@@ -12,15 +12,20 @@
 var tweet_set;
 var tweet_check;
 var tweet;
+var oembeds;
+var raw_tweets;
+var current;
 
 function search_twitter(q, page){
-	q += " instagr filter:links";
+  q += " instagr filter:links";
+  
 	$.ajax({
 	    url : "http://search.twitter.com/search.json?q="+escape(q)+"&page="+page+"&rpp=100&callback=?",
     	dataType: "json",
+    	async: "false",
 			success : function(data){
-    		var urls = new Array();
-    		var tweets = new Array();
+    		var urls = [];
+    		var tweets = [];
         if (!data.results) return false;
         
 	      //get the image url and status
@@ -42,7 +47,8 @@ function search_twitter(q, page){
 				$.embedly(urls, {maxWidth:500, key : '4eff5eecc9d811e083104040d3dc5c07' },
 					function(oembed){					
 						if (oembed != null && oembed.type == "photo"){
-							build_display(oembed, tweets[counter]);
+						  oembeds.push(oembed);
+						  raw_tweets.push(tweets[counter]);
 						}
 						counter++;
 				});
@@ -53,10 +59,15 @@ function search_twitter(q, page){
 var finishBuild = function(data, status){
   if (status == google.maps.StreetViewStatus.OK){
     if($.inArray(tweet[2], tweet_check) == -1){
+      console.log(tweet)
       tweet[0] = data.location.latLng;
       tweet_set.push(tweet);
       tweet_check.push(tweet[2])
-    }    
+    }
+  }
+  if (current < oembeds.length - 1){
+    current++;
+    build_display(oembeds[current], raw_tweets[current])
   }
 }
 
@@ -100,9 +111,14 @@ var setPanorama = function(latlng){
 }
 
 var timer;
-var show_seconds = 5000;
+var show_seconds = 10000;
 //TODO: add error check for no results
+
 var loop = function(){
+  //free up memory - doubt it'll work
+  oembeds = [];
+  raw_tweets = [];
+  
   (index == tweet_set.length - 1) ? index = 0 : index++;
   setPanorama(tweet_set[index][0])
   setTimeout(function(){
@@ -111,7 +127,7 @@ var loop = function(){
   setTimeout(function(){
     $('#curtain').fadeIn('fast');
   }, show_seconds - 500);
-  timer = setTimeout(function(){loop()}, show_seconds);  
+  timer = setTimeout(function(){loop()}, show_seconds / 2);
 }
 
 var countdown = function(timeLeft){
@@ -125,24 +141,38 @@ var countdown = function(timeLeft){
 }
 
 var scrape = function(){
+  tweet_set = [];
+  tweet_check = [];
+  oembeds = [];
+  raw_tweets = [];
+  current = 0;
+  index = 0;
+  
   q = $("#queryInput").val();
   $("#queryDisplay").html(q);
-  clearTimeout(timer);
-  tweet_set = new Array()
-  tweet_check = []
-  for (i = 0; i < 15; i++){
-    search_twitter(q, i);
+
+  for(page = 0; page < 15; page++){
+    search_twitter(q, page);
   }
+
+  setTimeout(function(){
+    if(oembeds.length > 0){
+      build_display(oembeds[0], raw_tweets[0]);  
+    }
+  }, (show_seconds / 2));
+  
   
   countdown(show_seconds);
   setTimeout(function(){loop()}, show_seconds);  
   setTimeout(function(){
     $('#change_modal').fadeOut(500);
-    $(".toggleModal").live("click", function() {
-      $("#change_modal").fadeToggle(500, "linear"); 
-    });
   }, show_seconds);  
 }
+
+$(".toggleModal").live("click", function() {
+  clearTimeout(timer);
+  $("#change_modal").fadeToggle(500, "linear"); 
+});
 
 </script>
 <style type="text/css">
