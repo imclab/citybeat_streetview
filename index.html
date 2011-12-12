@@ -190,7 +190,7 @@ $(".toggleModal").live("click", function() {
   html, body {
     height: 100%;
     font-family: "Arvo", "Helvetica", "Georgia", serif;
-    font-size: 12px;
+    font-size: 16px;
     vertical-align: baseline;
   }
   h1,h2,h3,h4,h5,h6 {
@@ -226,24 +226,12 @@ $(".toggleModal").live("click", function() {
     text-align: right;
   }
 
-  #tweet, #overlay, #header {
+  #footer, #overlay, #header {
     position: absolute;
     z-index: 4;
   }
-  #tweet {
-    margin-top: 10px;
-    background-color: #ccc;
-    padding: 18px 0px;
-    filter: alpha(opacity=70);
-    -khtml-opacity: 0.8;
-    -moz-opacity: 0.8;
-    opacity: 0.8; 
-    border-top: 1px solid #444;
-    font-size: 18px;
-    text-align: center;
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
+  #header {
+    font-size: 12px;
   }
   #header {
     top: 0px;
@@ -259,6 +247,7 @@ $(".toggleModal").live("click", function() {
     font-weight: bold;
     color: #efefef;
     display: inline-block;
+    margin-left: 18px;
     margin-right: 24px;
   }
   #queryDisplay {
@@ -266,12 +255,13 @@ $(".toggleModal").live("click", function() {
     display: inline-block;
   }
   #overlay {
-    bottom: 78px;
+    top: 58px;
     left: 18px;
     width: 400px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+    border: 1px solid #333;
   }
   #curtain {
     position: fixed;
@@ -314,6 +304,44 @@ $(".toggleModal").live("click", function() {
     text-align: center;
     line-height: 2em;
   }
+  #details {
+    width: 100%;
+    font-size: 18px;
+    position: relative;
+    z-index: 5;
+  }
+  #time {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    color: #333;
+  }
+  #description {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    color: #333;
+  }
+  #footer {
+    background-color: #ccc;
+    padding-bottom: 54px;
+    filter: alpha(opacity=70);
+    -khtml-opacity: 0.8;
+    -moz-opacity: 0.8;
+    opacity: 0.8; 
+    border-top: 1px solid #444;
+    font-size: 24px;
+    text-align: center;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+  }
+  #tweet {
+    background-color: #eee;
+    display: block;
+    padding: 18px;
+    border-bottom: 1px solid #444;
+  }
 </style>
 </head>
 <body onload="initialize()">
@@ -326,9 +354,13 @@ $(".toggleModal").live("click", function() {
   <div id="curtain"></div>
   <div id="pano" style="width: 100%; height: 100%;"></div>
   <img id="overlay"/>
-  <div id="time"></div>
-  <div id="description"></div>
-  <div id="tweet"></div>
+  <div id="footer">
+    <div id="tweet">asdf asdf asdf asdf asdf</div>
+  </div>
+  <div id="details">
+    <span id="time">asdf asdf sdf asdf </span>
+    <span id="description">asdfasdf asdf asdf</span>
+  </div>
   <div id="change_modal">
     <h1>HEY THERE!</h1>
     <p>Search for a word in the bar below and see realtime photos, tweets, and location!</p>
