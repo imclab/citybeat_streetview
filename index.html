@@ -112,8 +112,6 @@ var setPanorama = function(latlng){
 
 var timer;
 var show_seconds = 10000;
-//TODO: add error check for no results
-
 var loop = function(){
   //free up memory - doubt it'll work
   oembeds = [];
@@ -163,7 +161,13 @@ var scrape = function(){
   
   
   countdown(show_seconds);
-  setTimeout(function(){loop()}, show_seconds);  
+  setTimeout(function(){
+    if(tweet_set.length > 0){
+      loop()
+    } else {
+      alert("Sorry, no results for that query!")
+    }
+  }, show_seconds);  
   setTimeout(function(){
     $('#change_modal').fadeOut(500);
   }, show_seconds);  
