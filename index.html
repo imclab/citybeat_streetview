@@ -59,8 +59,8 @@ function search_twitter(q, page){
 var finishBuild = function(data, status){
   if (status == google.maps.StreetViewStatus.OK){
     if($.inArray(tweet[2], tweet_check) == -1){
-      console.log(tweet)
       tweet[0] = data.location.latLng;
+      tweet[4] = data.location.description;
       tweet_set.push(tweet);
       tweet_check.push(tweet[2])
     }
@@ -79,7 +79,8 @@ function build_display(oembed, status){
   tweet = [
     latlng,
     oembed['url'],
-    status['text']
+    status['text'],
+    status['created_at']
   ];
   sv.getPanoramaByLocation(latlng, 50, finishBuild);
 }
@@ -108,6 +109,8 @@ var setPanorama = function(latlng){
   panorama.setPosition(latlng);
   $("#overlay").attr("src", tweet_set[index][1]);
   $("#tweet").html(tweet_set[index][2]);
+  $("#time").html(tweet_set[index][3]);
+  $("#description").html(tweet_set[index][4]);
 }
 
 var timer;
@@ -323,6 +326,8 @@ $(".toggleModal").live("click", function() {
   <div id="curtain"></div>
   <div id="pano" style="width: 100%; height: 100%;"></div>
   <img id="overlay"/>
+  <div id="time"></div>
+  <div id="description"></div>
   <div id="tweet"></div>
   <div id="change_modal">
     <h1>HEY THERE!</h1>
