@@ -1,0 +1,159 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+html, body {
+  height: 100%;
+  font-family: "Arvo", "Helvetica", "Georgia", serif;
+  font-size: 16px;
+  vertical-align: baseline;
+}
+h1,h2,h3,h4,h5,h6 {
+  line-height: 1.1em;
+  margin-bottom: 12px;
+}
+p, ul, ol {
+  line-height: 1.5em;
+  margin-bottom: 12px;
+}
+a, a:visited {
+  color: #aaa;
+}
+a:hover {
+  text-decoration: none;
+}
+
+.left_right {
+  width: 100%; 
+  display: table;
+  .left, .right {
+    float: none;
+    vertical-align: middle;
+    display: table-cell;
+  }
+}
+.left {
+  width:100%;
+}
+.right {
+  overflow: visible;
+  white-space: nowrap;
+  text-align: right;
+}
+
+#footer, #overlay, #header {
+  position: absolute;
+  z-index: 4;
+}
+#header {
+  font-size: 12px;
+}
+#header {
+  top: 0px;
+  width: 100%;
+  line-height: 1.5em;
+  background-color: #111;
+  border-bottom: 1px solid #000;
+  color: #7f7f7f;
+}
+#logo {
+  margin: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #efefef;
+  display: inline-block;
+  margin-left: 18px;
+  margin-right: 24px;
+}
+#queryDisplay {
+  margin: 6px;
+  display: inline-block;
+}
+#overlay {
+  top: 58px;
+  left: 18px;
+  width: 400px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid #333;
+}
+#curtain {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #111;
+  z-index: 3;
+  background-image: url('images/triangles.png');
+  display: none;
+}
+#change_modal {
+  width: 476px;
+  padding: 12px;
+  position: absolute;
+  left: 50%;
+  top: 200px;
+  margin-left: -250px;
+  background-color: #efefef;
+  border: 1px solid #000;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  z-index: 5;
+}
+input {
+  padding: 6px;
+}
+.toggleModal {
+  font-size: 12px;
+}
+#countdown_text {
+  text-align: center;
+  font-style: italic;
+}
+#countdown {
+  font-style: normal;
+  font-weight: bold;
+  margin-left: 6px;
+  font-size: 24px;
+  text-align: center;
+  line-height: 2em;
+}
+#details {
+  width: 100%;
+  font-size: 18px;
+  position: relative;
+  z-index: 5;
+}
+#time {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  color: #333;
+}
+#description {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  color: #333;
+}
+#footer {
+  background-color: #ccc;
+  padding-bottom: 60px;
+  filter: alpha(opacity=70);
+  -khtml-opacity: 0.8;
+  -moz-opacity: 0.8;
+  opacity: 0.8; 
+  border-top: 1px solid #444;
+  font-size: 24px;
+  text-align: center;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+#tweet {
+  background-color: #eee;
+  display: block;
+  padding: 18px;
+  border-bottom: 1px solid #444;
+}
