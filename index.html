@@ -6,7 +6,7 @@
 <script src="//maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
 <script src="http://scripts.embed.ly/jquery.embedly.min.js" type="text/javascript"></script>
 <script src="snowfall.min.jquery.js" type="text/javascript"></script>
-<script src="date.js" type="text/javascript"></script>
+<script src="moment.js" type="text/javascript"></script>
 <script src="timeago.js" type="text/javascript"></script>
 <link href='http://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
 <link href='styles.css' rel='stylesheet' type='text/css'>
@@ -129,7 +129,7 @@ $(document).ready(function(){
     panorama.setPosition(latlng);
     $("#overlay").attr("src", tweet_set[index][1]);
     $("#tweet").html(tweet_set[index][2]);
-    $("#time").html(jQuery.timeago(Date.parse(tweet_set[index][3])) + ' near ');
+    $("#time").html(moment(tweet_set[index][3]).fromNow() + ' near ');
     $("#description").html(tweet_set[index][4]);
   }
 
