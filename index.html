@@ -21,9 +21,9 @@ function search_twitter(q, page){
   q += " instagr filter:links";
   
 	$.ajax({
-	    url : "http://search.twitter.com/search.json?q="+escape(q)+"&page="+page+"&rpp=100&callback=?",
+	    url : "all.json",
     	dataType: "json",
-    	async: "false",
+    	async: "true",
 			success : function(data){
     		var urls = [];
     		var tweets = [];
@@ -120,6 +120,7 @@ var loop = function(){
   //free up memory - doubt it'll work
   oembeds = [];
   raw_tweets = [];
+  tweet_check = [];
   
   (index == tweet_set.length - 1) ? index = 0 : index++;
   setPanorama(tweet_set[index][0])
@@ -132,17 +133,16 @@ var loop = function(){
   timer = setTimeout(function(){loop()}, show_seconds / 2);
 }
 
-var countdown = function(timeLeft){
-  tick = timeLeft / 1000 + "...";
-  $("#countdown").html(tick)
-  if (timeLeft - 1000 > 0){
-    setTimeout(function(){countdown(timeLeft - 1000)}, 1000);  
+var countdown = function(timePast){
+  $("#countdown").val(timePast++)
+  if (timePast < show_seconds){
+    setTimeout(function(){countdown(timePast)}, 100);  
   } else{
-    $("#countdown").html("")
+    $("#countdown").val(0)
   }
 }
 
-var scrape = function(){
+var scrape = function(homebrew){
   tweet_set = [];
   tweet_check = [];
   oembeds = [];
@@ -152,10 +152,15 @@ var scrape = function(){
   
   q = $("#queryInput").val();
   $("#queryDisplay").html(q);
-
-  for(page = 0; page < 15; page++){
-    search_twitter(q, page);
+  
+  if(homebrew == 1){
+    search_twitter(q, 0);
+  } else {
+    for(page = 0; page < 15; page++){
+      search_twitter(q, page);
+    }
   }
+  
 
   setTimeout(function(){
     if(oembeds.length > 0){
@@ -164,7 +169,7 @@ var scrape = function(){
   }, (show_seconds / 2));
   
   
-  countdown(show_seconds);
+  countdown(0);
   setTimeout(function(){
     if(tweet_set.length > 0){
       loop()
@@ -205,8 +210,12 @@ $(".toggleModal").live("click", function() {
     <h1>HEY THERE!</h1>
     <p>Search for a word in the bar below and see realtime photos, tweets, and location!</p>
       <input id="queryInput" type="text" value="christmas" />
-      <input type="submit" onclick="scrape()" value="Entertain Me" />
-    <div id="countdown"></div>
+      <input type="submit" onclick="scrape(1)" value="Entertain Me" />
+    <progress id="countdown" value="0" max="100">
+        <span id="fallback">
+        loading...
+        </span>
+      </progress>
   </div>
 </body>
 </html>
