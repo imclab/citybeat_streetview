@@ -13,7 +13,14 @@
 
 <script type="text/javascript">
 
+
 $(document).ready(function(){
+  var tweet_set;
+  var tweet_check;
+  var tweet;
+  var oembeds;
+  var raw_tweets;
+  var current;
 
   $(document).snowfall({
     flakeCount : 25,        // number
@@ -26,13 +33,6 @@ $(document).ready(function(){
     round : true,          // bool
     shadow : false          // bool
   });
-
-  var tweet_set;
-  var tweet_check;
-  var tweet;
-  var oembeds;
-  var raw_tweets;
-  var current;
 
   function search_twitter(q, page){
     q += " instagr filter:links";
@@ -56,17 +56,19 @@ $(document).ready(function(){
               var u = p[0].replace(' ', '');
               var idx = urls.length;
               urls[idx] = u;
-              tweets[idx] = obj;
+              tweets[u] = obj;
             }
           }
-    
+          
           //call embedly and build display
           var counter = 0;
           $.embedly(urls, {maxWidth:500, key : '4eff5eecc9d811e083104040d3dc5c07' },
-            function(oembed){         
+            function(oembed){
               if (oembed != null && oembed.type == "photo"){
+                var u = oembed['code'].match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
+                u = u[0]
                 oembeds.push(oembed);
-                raw_tweets.push(tweets[counter]);
+                raw_tweets.push(tweets[u]);
               }
               counter++;
           });
@@ -136,8 +138,8 @@ $(document).ready(function(){
   var load_seconds = 10000;
   var loop = function(){
     //free up memory - doubt it'll work
-    oembeds = [];
-    raw_tweets = [];
+    // oembeds = [];
+    // raw_tweets = [];
     tweet_check = [];
     
     (index == tweet_set.length - 1) ? index = 0 : index++;
