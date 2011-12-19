@@ -6,7 +6,7 @@ html, body {
   height: 100%;
   font-family: "Arvo", "Helvetica", "Georgia", serif;
   font-size: 16px;
-  vertical-align: baseline;
+  overflow: hidden;
 }
 h1,h2,h3,h4,h5,h6 {
   line-height: 1.1em;
@@ -53,22 +53,20 @@ a:hover {
   background-color: #111;
   border-bottom: 1px solid #000;
   color: #7f7f7f;
+  line-height: 54px;
+  height: 54px;
+  vertical-align: middle;
 }
 #logo {
-  margin: 12px;
-  font-size: 18px;
+  font-size: 28px;
   font-weight: bold;
   color: #efefef;
   display: inline-block;
-  margin-left: 18px;
+  margin-left: 24px;
   margin-right: 24px;
 }
-#queryDisplay {
-  margin: 6px;
-  display: inline-block;
-}
 #overlay {
-  top: 58px;
+  top: 72px;
   left: 18px;
   width: 400px;
   -moz-border-radius: 5px;
@@ -83,7 +81,6 @@ a:hover {
   background-color: #111;
   z-index: 3;
   background-image: url('images/christmas_pattern.jpg');
-  display: none;
 }
 #change_modal {
   width: 476px;
@@ -118,26 +115,27 @@ input {
   line-height: 2em;
 }
 #details {
-  width: 100%;
-  font-size: 18px;
-  position: relative;
-  z-index: 5;
-}
-#time {
-  position: absolute;
-  left: 18px;
-  bottom: 18px;
-  color: #333;
-}
-#description {
   position: absolute;
   right: 18px;
-  bottom: 18px;
-  color: #333;
+  top: 72px;
+  background-color: #eee;
+  filter: alpha(opacity=70);
+  -khtml-opacity: 0.8;
+  -moz-opacity: 0.8;
+  opacity: 0.8; 
+  border: 1px solid #444;
+  font-size: 24px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 18px;
+  z-index: 6;
+  max-width: 40%;
+  line-height: 1.5em;
 }
-#footer {
-  background-color: #ccc;
-  padding-bottom: 60px;
+#tweet {
+  z-index: 6;
+  background-color: #eee;
   filter: alpha(opacity=70);
   -khtml-opacity: 0.8;
   -moz-opacity: 0.8;
@@ -148,12 +146,7 @@ input {
   position: absolute;
   bottom: 0px;
   width: 100%;
-}
-#tweet {
-  background-color: #eee;
-  display: block;
   padding: 18px;
-  border-bottom: 1px solid #444;
 }
 #countdown {
   margin: 0px;
