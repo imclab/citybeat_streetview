@@ -23,11 +23,11 @@ $(document).ready(function(){
   var current;
 
   $(document).snowfall({
-    flakeCount : 25,        // number
+    flakeCount : 10,        // number
     flakeColor : '#ffffff', // string
     flakeIndex: 999999,     // number
     minSize : 1,            // number
-    maxSize : 5,            // number
+    maxSize : 17,            // number
     minSpeed : 1,           // number
     maxSpeed : 1.5,           // number
     round : true,          // bool
@@ -129,7 +129,7 @@ $(document).ready(function(){
     panorama.setPosition(latlng);
     $("#overlay").attr("src", tweet_set[index][1]);
     $("#tweet").html(tweet_set[index][2]);
-    $("#time").html(jQuery.timeago(Date.parse(tweet_set[index][3])));
+    $("#time").html(jQuery.timeago(Date.parse(tweet_set[index][3])) + ' near ');
     $("#description").html(tweet_set[index][4]);
   }
 
@@ -211,9 +211,9 @@ $(document).ready(function(){
     $("#change_modal").fadeToggle(500, "linear"); 
   });
 
-  $("#scrape").live("click", function() {
+  // $("#scrape").live("click", function() {
     scrape(1);
-  });
+  // });
 
   initialize();
 
@@ -223,30 +223,22 @@ $(document).ready(function(){
 <body>
   <div id="header">
     <span id="logo">holidaybeat</span>
-    <span id="queryText">Searching For:</span>
-    <span id="queryDisplay">Nothing Yet</span>
-    <a href="#" class="toggleModal">Change Search Term</a>
   </div>
   <div id="curtain"></div>
   <div id="pano" style="width: 100%; height: 100%;"></div>
   <img id="overlay"/>
-  <div id="footer">
-    <div id="tweet"></div>
-  </div>
+  <div id="tweet"></div>
   <div id="details">
     <span id="time"></span>
     <span id="description">Ho Ho Ho...</span>
   </div>
   <div id="change_modal">
-    <h2>Happy Holidays!</h2>
-    <p>Share the holiday spirit with everyone around the world. Type a term like <strong>christmas</strong> or <strong>holiday</strong> in the box below.</p>
-      <input id="queryInput" type="text" value="christmas" />
-      <input type="submit" id="scrape" value="Entertain Me" />
-      <progress id="countdown" value="0" max="100">
-        <span id="fallback">
-        loading...
-        </span>
-      </progress>
+    <h2>Gathering Holiday Spirit...</h2>
+    <progress id="countdown" value="0" max="100">
+      <span id="fallback">
+      loading...
+      </span>
+    </progress>
   </div>
 </body>
 </html>
