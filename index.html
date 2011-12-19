@@ -115,7 +115,7 @@ var setPanorama = function(latlng){
 }
 
 var timer;
-var show_seconds = 8000;
+var show_seconds = 10000;
 var load_seconds = 10000;
 var loop = function(){
   //free up memory - doubt it'll work
@@ -124,10 +124,14 @@ var loop = function(){
   tweet_check = [];
   
   (index == tweet_set.length - 1) ? index = 0 : index++;
-  setPanorama(tweet_set[index][0])
+
+  //i'm not seeing any fading right here - it just disappears
   setTimeout(function(){
     $('#curtain').fadeOut('fast');
   }, 500);
+
+  setPanorama(tweet_set[index][0])
+
   setTimeout(function(){
     $('#curtain').fadeIn('fast');
   }, show_seconds - 500);
