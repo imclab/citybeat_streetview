@@ -13,9 +13,9 @@
 
 <script type="text/javascript">
 
-
+var tweet_set;
 $(document).ready(function(){
-  var tweet_set;
+  
   var tweet_check;
   var tweet;
   var oembeds;
@@ -38,7 +38,7 @@ $(document).ready(function(){
     q += " instagr filter:links";
     
     $.ajax({
-        url : "all.json",
+        url : "allnew.json",
         dataType: "json",
         async: "true",
         success : function(data){
@@ -135,7 +135,7 @@ $(document).ready(function(){
 
   var timer;
   var show_seconds = 11000;
-  var load_seconds = 10000;
+  var load_seconds = 20000;
   var loop = function(){
     //free up memory - doubt it'll work
     // oembeds = [];
@@ -190,7 +190,7 @@ $(document).ready(function(){
       if(oembeds.length > 0){
         build_display(oembeds[0], raw_tweets[0]);  
       }
-    }, (show_seconds / 2));
+    }, (load_seconds / 2));
     
     
     countdown(0);
@@ -200,10 +200,10 @@ $(document).ready(function(){
       } else {
         alert("Sorry, no results for that query!")
       }
-    }, show_seconds);  
+    }, load_seconds);  
     setTimeout(function(){
       $('#change_modal').fadeOut(500);
-    }, show_seconds);  
+    }, load_seconds);  
   }
 
   $(".toggleModal").live("click", function() {
