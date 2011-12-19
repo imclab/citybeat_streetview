@@ -5,198 +5,222 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
 <script src="//maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
 <script src="http://scripts.embed.ly/jquery.embedly.min.js" type="text/javascript"></script>
+<script src="snowfall.min.jquery.js" type="text/javascript"></script>
+<script src="date.js" type="text/javascript"></script>
+<script src="timeago.js" type="text/javascript"></script>
 <link href='http://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
 <link href='styles.css' rel='stylesheet' type='text/css'>
 
 <script type="text/javascript">
 
-var tweet_set;
-var tweet_check;
-var tweet;
-var oembeds;
-var raw_tweets;
-var current;
+$(document).ready(function(){
 
-function search_twitter(q, page){
-  q += " instagr filter:links";
-  
-	$.ajax({
-	    url : "all.json",
-    	dataType: "json",
-    	async: "true",
-			success : function(data){
-    		var urls = [];
-    		var tweets = [];
-        if (!data.results) return false;
-        
-	      //get the image url and status
-    		for (i=0;i<data.results.length;i++){
-    			var obj = data.results[i];    			
-    			if (obj['geo'] == null) continue;
-    			var p = obj.text.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
-
-    			if (p != null){
-    				var u = p[0].replace(' ', '');
-    				var idx = urls.length;
-    				urls[idx] = u;
-    				tweets[idx] = obj;
-    			}
-    		}
-	
-        //call embedly and build display
-				var counter = 0;
-				$.embedly(urls, {maxWidth:500, key : '4eff5eecc9d811e083104040d3dc5c07' },
-					function(oembed){					
-						if (oembed != null && oembed.type == "photo"){
-						  oembeds.push(oembed);
-						  raw_tweets.push(tweets[counter]);
-						}
-						counter++;
-				});
-    	}
+  $(document).snowfall({
+    flakeCount : 25,        // number
+    flakeColor : '#ffffff', // string
+    flakeIndex: 999999,     // number
+    minSize : 1,            // number
+    maxSize : 5,            // number
+    minSpeed : 1,           // number
+    maxSpeed : 1.5,           // number
+    round : true,          // bool
+    shadow : false          // bool
   });
-}
 
-var finishBuild = function(data, status){
-  if (status == google.maps.StreetViewStatus.OK){
-    if($.inArray(tweet[2], tweet_check) == -1){
-      tweet[0] = data.location.latLng;
-      tweet[4] = data.location.description;
-      tweet_set.push(tweet);
-      tweet_check.push(tweet[2])
+  var tweet_set;
+  var tweet_check;
+  var tweet;
+  var oembeds;
+  var raw_tweets;
+  var current;
+
+  function search_twitter(q, page){
+    q += " instagr filter:links";
+    
+    $.ajax({
+        url : "all.json",
+        dataType: "json",
+        async: "true",
+        success : function(data){
+          var urls = [];
+          var tweets = [];
+          if (!data.results) return false;
+          
+          //get the image url and status
+          for (i=0;i<data.results.length;i++){
+            var obj = data.results[i];          
+            if (obj['geo'] == null) continue;
+            var p = obj.text.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
+
+            if (p != null){
+              var u = p[0].replace(' ', '');
+              var idx = urls.length;
+              urls[idx] = u;
+              tweets[idx] = obj;
+            }
+          }
+    
+          //call embedly and build display
+          var counter = 0;
+          $.embedly(urls, {maxWidth:500, key : '4eff5eecc9d811e083104040d3dc5c07' },
+            function(oembed){         
+              if (oembed != null && oembed.type == "photo"){
+                oembeds.push(oembed);
+                raw_tweets.push(tweets[counter]);
+              }
+              counter++;
+          });
+        }
+    });
+  }
+
+  var finishBuild = function(data, status){
+    if (status == google.maps.StreetViewStatus.OK){
+      if($.inArray(tweet[2], tweet_check) == -1){
+        tweet[0] = data.location.latLng;
+        tweet[4] = data.location.description;
+        tweet_set.push(tweet);
+        tweet_check.push(tweet[2])
+      }
+    }
+    if (current < oembeds.length - 1){
+      current++;
+      build_display(oembeds[current], raw_tweets[current])
     }
   }
-  if (current < oembeds.length - 1){
-    current++;
-    build_display(oembeds[current], raw_tweets[current])
+
+  var sv = new google.maps.StreetViewService();
+  function build_display(oembed, status){
+    lat = String(status['geo']['coordinates'][0]);
+    lng = String(status['geo']['coordinates'][1]);
+    latlng = new google.maps.LatLng((lat), (lng));
+    tweet = [
+      latlng,
+      oembed['url'],
+      status['text'],
+      status['created_at']
+    ];
+    sv.getPanoramaByLocation(latlng, 50, finishBuild);
   }
-}
 
-var sv = new google.maps.StreetViewService();
-function build_display(oembed, status){
-  lat = String(status['geo']['coordinates'][0]);
-  lng = String(status['geo']['coordinates'][1]);
-  latlng = new google.maps.LatLng((lat), (lng));
-  tweet = [
-    latlng,
-    oembed['url'],
-    status['text'],
-    status['created_at']
-  ];
-  sv.getPanoramaByLocation(latlng, 50, finishBuild);
-}
-
-var panorama;
-function initialize() {
-  latlng = new google.maps.LatLng(40.709385,-74.011323);
-  var panoramaOptions = {
-    position: latlng,
-    pov: {
-      heading: 34,
-      pitch: 10,
-      zoom: 1
-    },
-    panControl: false,
-    linksControl: false,
-    zoomControl: false,
-    addressControl: false,
-    scrollwheel: false,
-  };
-  panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
-}
-
-var index = 0;
-var setPanorama = function(latlng){
-  panorama.setPosition(latlng);
-  $("#overlay").attr("src", tweet_set[index][1]);
-  $("#tweet").html(tweet_set[index][2]);
-  $("#time").html(tweet_set[index][3]);
-  $("#description").html(tweet_set[index][4]);
-}
-
-var timer;
-var show_seconds = 10000;
-var load_seconds = 10000;
-var loop = function(){
-  //free up memory - doubt it'll work
-  oembeds = [];
-  raw_tweets = [];
-  tweet_check = [];
-  
-  (index == tweet_set.length - 1) ? index = 0 : index++;
-
-  //i'm not seeing any fading right here - it just disappears
-  setTimeout(function(){
-    $('#curtain').fadeOut('fast');
-  }, 500);
-
-  setPanorama(tweet_set[index][0])
-
-  setTimeout(function(){
-    $('#curtain').fadeIn('fast');
-  }, show_seconds - 500);
-  timer = setTimeout(function(){loop()}, show_seconds);
-}
-
-var countdown = function(timePast){
-  $("#countdown").val(timePast++)
-  if (timePast < load_seconds){
-    setTimeout(function(){countdown(timePast)}, 100);  
-  } else{
-    $("#countdown").val(0)
+  var panorama;
+  function initialize() {
+    latlng = new google.maps.LatLng(40.709385,-74.011323);
+    var panoramaOptions = {
+      position: latlng,
+      pov: {
+        heading: 34,
+        pitch: 10,
+        zoom: 1
+      },
+      panControl: false,
+      linksControl: false,
+      zoomControl: false,
+      addressControl: false,
+      scrollwheel: false,
+    };
+    panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
   }
-}
 
-var scrape = function(homebrew){
-  tweet_set = [];
-  tweet_check = [];
-  oembeds = [];
-  raw_tweets = [];
-  current = 0;
-  index = 0;
-  
-  q = $("#queryInput").val();
-  $("#queryDisplay").html(q);
-  
-  if(homebrew == 1){
-    search_twitter(q, 0);
-  } else {
-    for(page = 0; page < 15; page++){
-      search_twitter(q, page);
+  var index = 0;
+  var setPanorama = function(latlng){
+    panorama.setPosition(latlng);
+    $("#overlay").attr("src", tweet_set[index][1]);
+    $("#tweet").html(tweet_set[index][2]);
+    $("#time").html(jQuery.timeago(Date.parse(tweet_set[index][3])));
+    $("#description").html(tweet_set[index][4]);
+  }
+
+  var timer;
+  var show_seconds = 10000;
+  var load_seconds = 10000;
+  var loop = function(){
+    //free up memory - doubt it'll work
+    oembeds = [];
+    raw_tweets = [];
+    tweet_check = [];
+    
+    (index == tweet_set.length - 1) ? index = 0 : index++;
+
+    //i'm not seeing any fading right here - it just disappears
+    setTimeout(function(){
+      $('#curtain').fadeOut('fast');
+    }, 500);
+
+    setPanorama(tweet_set[index][0])
+
+    setTimeout(function(){
+      $('#curtain').fadeIn('fast');
+    }, show_seconds - 500);
+    timer = setTimeout(function(){loop()}, show_seconds);
+  }
+
+  var countdown = function(timePast){
+    $("#countdown").val(timePast++)
+    if (timePast < load_seconds){
+      setTimeout(function(){countdown(timePast)}, 100);  
+    } else{
+      $("#countdown").val(0)
     }
   }
-  
 
-  setTimeout(function(){
-    if(oembeds.length > 0){
-      build_display(oembeds[0], raw_tweets[0]);  
-    }
-  }, (show_seconds / 2));
-  
-  
-  countdown(0);
-  setTimeout(function(){
-    if(tweet_set.length > 0){
-      loop()
+  var scrape = function(homebrew){
+    tweet_set = [];
+    tweet_check = [];
+    oembeds = [];
+    raw_tweets = [];
+    current = 0;
+    index = 0;
+    
+    q = $("#queryInput").val();
+    $("#queryDisplay").html(q);
+    
+    if(homebrew == 1){
+      search_twitter(q, 0);
     } else {
-      alert("Sorry, no results for that query!")
+      for(page = 0; page < 15; page++){
+        search_twitter(q, page);
+      }
     }
-  }, show_seconds);  
-  setTimeout(function(){
-    $('#change_modal').fadeOut(500);
-  }, show_seconds);  
-}
+    
 
-$(".toggleModal").live("click", function() {
-  clearTimeout(timer);
-  $("#change_modal").fadeToggle(500, "linear"); 
+    setTimeout(function(){
+      if(oembeds.length > 0){
+        build_display(oembeds[0], raw_tweets[0]);  
+      }
+    }, (show_seconds / 2));
+    
+    
+    countdown(0);
+    setTimeout(function(){
+      if(tweet_set.length > 0){
+        loop()
+      } else {
+        alert("Sorry, no results for that query!")
+      }
+    }, show_seconds);  
+    setTimeout(function(){
+      $('#change_modal').fadeOut(500);
+    }, show_seconds);  
+  }
+
+  $(".toggleModal").live("click", function() {
+    clearTimeout(timer);
+    $("#change_modal").fadeToggle(500, "linear"); 
+  });
+
+  $("#scrape").live("click", function() {
+    scrape(1);
+  });
+
+  initialize();
+
 });
-
 </script>
 </head>
-<body onload="initialize()">
+<body>
   <div id="header">
-    <span id="logo">citybeat</span>
+    <span id="logo">holidaybeat</span>
     <span id="queryText">Searching For:</span>
     <span id="queryDisplay">Nothing Yet</span>
     <a href="#" class="toggleModal">Change Search Term</a>
@@ -205,18 +229,18 @@ $(".toggleModal").live("click", function() {
   <div id="pano" style="width: 100%; height: 100%;"></div>
   <img id="overlay"/>
   <div id="footer">
-    <div id="tweet">asdf asdf asdf asdf asdf</div>
+    <div id="tweet"></div>
   </div>
   <div id="details">
-    <span id="time">asdf asdf sdf asdf </span>
-    <span id="description">asdfasdf asdf asdf</span>
+    <span id="time"></span>
+    <span id="description">Ho Ho Ho...</span>
   </div>
   <div id="change_modal">
-    <h1>HEY THERE!</h1>
-    <p>Search for a word in the bar below and see realtime photos, tweets, and location!</p>
+    <h2>Happy Holidays!</h2>
+    <p>Share the holiday spirit with everyone around the world. Type a term like <strong>christmas</strong> or <strong>holiday</strong> in the box below.</p>
       <input id="queryInput" type="text" value="christmas" />
-      <input type="submit" onclick="scrape(1)" value="Entertain Me" />
-    <progress id="countdown" value="0" max="100">
+      <input type="submit" id="scrape" value="Entertain Me" />
+      <progress id="countdown" value="0" max="100">
         <span id="fallback">
         loading...
         </span>
