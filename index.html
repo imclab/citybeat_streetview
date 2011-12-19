@@ -21,7 +21,7 @@ function search_twitter(q, page){
   q += " instagr filter:links";
   
 	$.ajax({
-	    url : "all.json",
+	    url : "50.json",
     	dataType: "json",
     	async: "true",
 			success : function(data){
@@ -115,7 +115,8 @@ var setPanorama = function(latlng){
 }
 
 var timer;
-var show_seconds = 10000;
+var show_seconds = 8000;
+var load_seconds = 10000;
 var loop = function(){
   //free up memory - doubt it'll work
   oembeds = [];
@@ -130,12 +131,12 @@ var loop = function(){
   setTimeout(function(){
     $('#curtain').fadeIn('fast');
   }, show_seconds - 500);
-  timer = setTimeout(function(){loop()}, show_seconds / 2);
+  timer = setTimeout(function(){loop()}, show_seconds);
 }
 
 var countdown = function(timePast){
   $("#countdown").val(timePast++)
-  if (timePast < show_seconds){
+  if (timePast < load_seconds){
     setTimeout(function(){countdown(timePast)}, 100);  
   } else{
     $("#countdown").val(0)
