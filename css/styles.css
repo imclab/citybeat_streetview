@@ -201,7 +201,7 @@ a:hover {
   background-color: #111;
   z-index: 10;
   /*background-image: url('images/christmas_pattern.jpg');*/
-  background-image: url('images/leaves.png');
+  background-image: url('../images/leaves.png');
 }
 #change_modal {
   width: 476px;
