@@ -123,7 +123,7 @@ $(document).ready(function(){
 	var setupSite = function(ig_post) {
 		panorama.setPosition(ig_post.sv_latlng);
 		$("#overlay").attr("src", ig_post.pic_url);
-		$("#tweet").html(ig_post.caption);
+		$("#tweet").html(ig_post.caption + ' <a href="' + ig_post.link + '" target="_blank">' + ig_post.link + '</a>');
 		$("#time").html(moment.unix(ig_post.created).fromNow() + ' near ');
 		$("#description").html(ig_post.loc);
 	};
