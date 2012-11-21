@@ -1,3 +1,4 @@
+*
 * {
   margin: 0px;
   padding: 0px;
@@ -42,10 +43,18 @@ a:hover {
   text-align: right;
 }
 
+.four-column {
+  width: 25%;
+  height: 100%;
+  display: inline;
+  float: left;
+}
+
 #footer, #overlay, #header {
   position: absolute;
   z-index: 4;
 }
+
 #header {
   font-size: 12px;
   top: 0px;
@@ -58,9 +67,123 @@ a:hover {
   height: 54px;
   vertical-align: middle;
   z-index: 11;
-  text-align: center;
+  /*text-align: center;*/
   position: absolute;
 }
+.logo {
+  width: auto;
+  font-size: 28px;
+  font-weight: bold;
+  color: #EFEFEF;
+  margin-left: 9px;
+  margin-right: 12px;
+}
+.search {
+  margin-left: 6px;
+  width: 25%;
+}
+
+.prepend {
+  width: auto;
+
+  background: 
+  #3D4041;
+  margin-right: -4px;
+  padding: 8px 6px;
+  padding-bottom: 7px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+
+#search-box {
+  width: auto;
+  height: 20px;
+  padding: 4px 6px;
+  display: inline-block;
+  outline: none;
+
+  border: 1px solid #CCC;
+  /*
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  */
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+#submit {
+  width: 20%;
+  height: 30px;
+
+  margin-left: -5px;
+  padding-top: 1px;
+
+  color: #66CAD8;
+  background: #3D4041;
+  border: 1px solid #434D50;
+
+  border-top-right-radius: 2px;
+  -webkit-border-top-right-radius: 2px;
+  -moz-border-top-right-radius: 2px;
+  -ms-border-top-right-radius: 2px;
+  -o-border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  -webkit-border-bottom-right-radius: 2px;
+  -moz-border-bottom-right-radius: 2px;
+  -ms-border-bottom-right-radius: 2px;
+  -o-border-bottom-right-radius: 2px;
+
+  cursor: pointer;
+}
+
+#submit:hover {
+  text-decoration: none;
+  background-color: #A38E8E;
+  color: white;
+  background-position: 0 -15px;
+  -webkit-transition: background-position 0.1s linear;
+  -moz-transition: background-position 0.1s linear;
+  -o-transition: background-position 0.1s linear;
+  transition: background-position 0.1s linear;
+
+  cursor: pointer;
+}
+
+#submit:active {
+  -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2) inset;
+  -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2) inset;
+}
+
+.slogan {
+  width: auto;
+  font-size: 14px;
+  vertical-align: middle;
+  text-align: center;
+}
+.production {
+  width: auto;
+  float: right;
+  text-align: right;
+  font-size: 18px;
+  text-decoration: none;
+  margin-right:9px;
+  right: 0;
+}
+.production:hover {
+  text-decoration: underline;
+}
+
+#pano {
+  width: 100%;
+  height: 100%;
+}
+
 #overlay {
   top: 72px;
   left: 18px;
@@ -94,9 +217,6 @@ a:hover {
   -webkit-border-radius: 5px;
   border-radius: 5px;
   z-index: 11;
-}
-input {
-  padding: 6px;
 }
 .toggleModal {
   font-size: 12px;
@@ -153,30 +273,4 @@ input {
 #countdown {
   margin: 0px;
   margin-top: 12px;
-}
-.production {
-  float: right;
-  text-align: right;
-  margin-right: 18px;
-  font-size: 18px;
-  text-decoration: none;
-  position: absolute;
-  right: 0;
-}
-.production:hover {
-  text-decoration: underline;
-}
-.slogan {
-  font-size: 14px;
-  line-height: 100%;
-  height: 15px;
-}
-#logo {
-  font-size: 28px;
-  font-weight: bold;
-  color: #EFEFEF;
-  display: inline-block;
-  margin-right: 18px;
-  position: absolute;
-  left: 10px
 }

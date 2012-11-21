@@ -44,7 +44,10 @@ $(document).ready(function(){
 				}
 				
 				if(ig_posts.length < 50) {
-					search_instagram(tag, data.pagination.next_url, cb);
+          //Call on the heap, not stack
+          setTimeout(function() {
+            search_instagram(tag, data.pagination.next_url, cb);
+          }, 0);
 				}
 			});
 		});
@@ -123,7 +126,7 @@ $(document).ready(function(){
 		$("#tweet").html(ig_post.caption);
 		$("#time").html(moment.unix(ig_post.created).fromNow() + ' near ');
 		$("#description").html(ig_post.loc);
-	}
+	};
 
 
 	var loop = function() {
@@ -140,20 +143,29 @@ $(document).ready(function(){
 		//Fade out the content then fade in the curtain
 		setTimeout(function(){
 			$('#curtain').fadeIn('fast');
-			$('#overlay').fadeOut('fast')
+			$('#overlay').fadeOut('fast');
 		}, show_seconds - 250);
 
 		timer = setTimeout(function(){ loop(); }, show_seconds);
-	}
+	};
+
+  function get(name){
+    if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+      return decodeURIComponent(name[1]);
+  }
 
 	var query = function(event) {
 		current = 0;
 		index = 0;
 
-		q = $("#queryInput").val();
-		$("#queryDisplay").html(q);
+		var q = get("q");
+    if(!q) {
+      q = "thanksgiving";
+    }
 
-		search_instagram('thanksgiving', null, function() {
+    $("#search-box").val(q);
+
+		search_instagram(q, null, function() {
 			if(ig_posts.length > 0) {
 				loop();
 			} else {
