@@ -2,39 +2,63 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
-<link href='http://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Page styles -->
+<link type='text/css' href='css/demo.css' rel='stylesheet' media='screen' />
+
+<!-- Contact Form CSS files -->
+<link type='text/css' href='css/basic.css' rel='stylesheet' media='screen' />
 
 <script src="js/moment.min.js" type="text/javascript"></script>
 
 <link href="css/styles.css" rel="stylesheet" type="text/css">
 <script src="js/app.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36501058-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+
 </head>
 <body>
   <div id="header">
-    <div class="four-column logo">
-      thebeat
+		<div class="four-column logo">
+			<div id="heading">
+				the #<span class="hashtag"></span> beat
+			</div>
+			<div class="slogan">
+				 Instagram photos and what's around them
+			</div>
     </div>
-    <div class="four-column search">
-      <form method="get">
-        <span class="prepend">#</span>
-        <input type="text" name="q" id="search-box" />
-        <input type="submit" id="submit" value="Submit"/>
-      </form>
+		<div class="four-column search">
+			<div class="search-slogan">
+				Explore other topics
+			</div>
+			<div class="search-bar">
+				<form method="get">
+					<span class="prepend">#</span>
+					<input type="text" name="q" id="search-box" />
+					<input type="submit" id="submit" value="Submit"/>
+				</form>
+			</div>
     </div>
-    <div class="four-column slogan">
-        whats the context of those instagram pics?
+		<div class="four-column info">
+			<span><a href="javascript:void(0)" id="about">About</a></span>
+			| <span>Share <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out instagram photos and what's around them!" data-hashtags="smilbeat"></a></span>
     </div>
-    <div class="four-column production">
-      a <a href="http://sm.rutgers.edu/">SMIL</a> production
-    </div>
-    <!---
-    <span id="logo">cheerbeat</span>
-    <span class="slogan">a holiday mashup made with Instagram, Google, and a whole lot of cheer.</span>
-    <span class="production">a <a href="http://sm.rutgers.edu/">SMIL</a> production</span>
-    -->
   </div>
   <div id="curtain"></div>
   <div id="pano"></div>
@@ -54,6 +78,30 @@
     </progress>
 	</div>
 	-->
+
+	<!-- modal content -->
+	<div id="basic-modal-content">
+		<h3>About the Beat</h3>
+		<p> This website is a project of the Social Media Information Lab, part of the School
+		of Communications and Infromation at Rutgers University.</p>
+		<p>We use geo-tagged Instagram pictures and combine them with the coresponding
+		Google StreetView location.</p>
+		<p>
+		Feel free to explore your own beat by inputing keywords in the search box.
+		</p>
+		<p>Read more about the lab at sm.rutgers.edu or follow us @sminfolab</p>
+
+		<p>Credits</p>
+		<p>Jerry Reptak @JetFault, Abe Stanway @abestanway, Ian Jennings @sw1tch<p>
+	</div>
+
+	<!-- preload the images -->
+	<div style='display:none'>
+		<img src='images/x.png' alt='' />
+	</div>
+
+<script type='text/javascript' src='js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='js/basic.js'></script>
 </body>
 </html>
 

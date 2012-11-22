@@ -36,6 +36,7 @@ $(document).ready(function(){
 		}
 
 		$.getJSON(instagram_api, function(data) {
+			console.log(data);
 			parse_instagram(data, function() {
 				//Only call CB once
 				if(ig_posts.length >= 1 && cb) {
@@ -43,7 +44,7 @@ $(document).ready(function(){
 					cb = null;
 				}
 				
-				if(ig_posts.length < 50) {
+				if(ig_posts.length < 50 && data.pagination.next_url) {
           //Call on the heap, not stack
           setTimeout(function() {
             search_instagram(tag, data.pagination.next_url, cb);
@@ -87,11 +88,12 @@ $(document).ready(function(){
 	function create_location(ig_post, cb) {
 		var lat = ig_post.latlng.latitude;
 		var lng = ig_post.latlng.longitude;
-		var latlng = ig_post.sv_latlng = new google.maps.LatLng(lat, lng);
+		var latlng = new google.maps.LatLng(lat, lng);
 
-		sv.getPanoramaByLocation(latlng, 10, function(sv_data, sv_status) {
+		sv.getPanoramaByLocation(latlng, 30, function(sv_data, sv_status) {
 			if(sv_status == google.maps.StreetViewStatus.OK && sv_data.location.description) {
 				ig_post.loc = sv_data.location.description;
+				ig_post.sv_pano = sv_data.location.pano;
 				cb(ig_post);
 			} else {
 				//No StreetMap Data for this long/lat
@@ -121,7 +123,8 @@ $(document).ready(function(){
 	var index = 0;
 
 	var setupSite = function(ig_post) {
-		panorama.setPosition(ig_post.sv_latlng);
+		//panorama.setPosition(ig_post.sv_latlng);
+		panorama.setPano(ig_post.sv_pano);
 		$("#overlay").attr("src", ig_post.pic_url);
 		$("#tweet").html(ig_post.caption + ' <a href="' + ig_post.link + '" target="_blank">' + ig_post.link + '</a>');
 		$("#time").html(moment.unix(ig_post.created).fromNow() + ' near ');
@@ -154,16 +157,24 @@ $(document).ready(function(){
       return decodeURIComponent(name[1]);
   }
 
-	var query = function(event) {
+	function htmlEncode(value){
+		return $('<div/>').text(value).html();
+	}
+
+	var query = function() {
 		current = 0;
 		index = 0;
 
 		var q = get("q");
+		q = htmlEncode(q);
+
     if(!q) {
       q = "thanksgiving";
     }
 
-    $("#search-box").val(q);
+		console.log(q);
+
+    $(".hashtag").text(q);
 
 		search_instagram(q, null, function() {
 			if(ig_posts.length > 0) {
@@ -181,8 +192,6 @@ $(document).ready(function(){
 
 	initialize();
 
-	// $("#scrape").live("click", function() {
-	query(1);
-	// });
+	query();
 
 });
