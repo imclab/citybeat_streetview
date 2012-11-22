@@ -182,6 +182,14 @@ a:hover {
 	vertical-align: middle;
 }
 
+.twitter-follow-button {
+	vertical-align: middle;
+}
+
+#basic-modal-content > p > a {
+	text-decoration: none;
+}
+
 .production:hover {
   text-decoration: underline;
 }
