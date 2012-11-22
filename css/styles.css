@@ -188,6 +188,10 @@ a:hover {
 	margin-right: 2px;
 	margin-left: 2px;
 }
+#about {
+	text-decoration: none;
+	font-weight: 400;
+}
 
 .info > span > iframe {
 	margin-left: 2px;
