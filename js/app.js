@@ -36,10 +36,9 @@ $(document).ready(function(){
 		}
 
 		$.getJSON(instagram_api, function(data) {
-			console.log(data);
 			parse_instagram(data, function() {
 				//Only call CB once
-				if(ig_posts.length >= 1 && cb) {
+				if( (ig_posts.length >= 1 && cb) || (!data.pagination.next_url && cb) ) {
 					cb();
 					cb = null;
 				}
@@ -171,8 +170,6 @@ $(document).ready(function(){
     if(!q) {
       q = "thanksgiving";
     }
-
-		console.log(q);
 
     $(".hashtag").text(q);
 
