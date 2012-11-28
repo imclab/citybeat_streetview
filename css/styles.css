@@ -235,6 +235,29 @@ a:hover {
   /*background-image: url('images/christmas_pattern.jpg');*/
   background-image: url('../images/leaves.png');
 }
+
+#error-div {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  top: 45%;
+  z-index: 15;
+}
+
+#error-div > div {
+  background: whitesmoke;
+  font-size: 1.5em;
+  padding: 10px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  margin-right:auto;
+  margin-left:auto;
+  width:35%;
+  text-align: center;
+}
+
 #change_modal {
   width: 476px;
   padding: 12px;

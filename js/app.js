@@ -11,6 +11,10 @@ $(document).ready(function(){
 	var show_seconds = 11000;
 	var load_seconds = 10000;
 
+  var initial_posts_to_get = 9;
+
+  var next_page = null;
+
 /*	$(document).snowfall({
 		flakeCount : 10,        // number
 		flakeColor : '#ffffff', // string
@@ -24,6 +28,14 @@ $(document).ready(function(){
 	});
 	*/
 
+  function report_error(error) {
+    console.log("Error occured: " + error);
+    if(ig_posts.length == 0) {
+      $("#error-info").html(error);
+      $("#error-info").css('display', 'block');
+    }
+  }
+
 	function search_instagram(tag, next_url, cb) {
 		var instagram_api;
 
@@ -35,21 +47,38 @@ $(document).ready(function(){
 				"/media/recent?client_id=" + client_id + "&callback=?";
 		}
 
-		$.getJSON(instagram_api, function(data) {
-			parse_instagram(data, function() {
-				//Only call CB once
-				if( (ig_posts.length >= 1 && cb) || (!data.pagination.next_url && cb) ) {
-					cb();
-					cb = null;
-				}
-				
-				if(ig_posts.length < 50 && data.pagination.next_url) {
-          //Call on the heap, not stack
-          setTimeout(function() {
-            search_instagram(tag, data.pagination.next_url, cb);
-          }, 0);
-				}
-			});
+		$.ajax({
+      url: instagram_api,
+      type: 'GET',
+      dataType: 'jsonp',
+      success: function(data) {
+        parse_instagram(data, function() {
+
+          if(data.meta.code != 200) {
+            console.log("Error occured: " + JSON.stringify(data.meta));
+            report_error(JSON.stringify(data.meta));
+          }
+
+          //Only call CB once, if you have at least one post or there are no more pages
+          if( (ig_posts.length >= 1 && cb) || (!data.pagination.next_url && cb) ) {
+            cb();
+            cb = null;
+          }
+
+          next_page = data.pagination.next_url;
+
+          if( (ig_posts.length < initial_posts_to_get) && next_page) {
+            //Call on the heap, not stack
+            setTimeout(function() {
+              search_instagram(tag, data.pagination.next_url, cb);
+            }, 0);
+          }
+        });
+      },
+      error: function() {
+        console.log("Error occured!");
+        report_error();
+      }
 		});
 	}
 
@@ -134,6 +163,14 @@ $(document).ready(function(){
 	var loop = function() {
 		(index == ig_posts.length - 1) ? index = 0 : index++;
 
+    console.log("Index: " + index);
+    console.log("Posts: " + ig_posts.length);
+
+    if( (index == ig_posts.length - 3) && (next_page) ) {
+      search_instagram(null, next_page, null);
+      console.log("Getting more posts");
+    }
+
 		//Fade out the curtain then fade in content
 		setTimeout(function(){
 			$('#overlay').fadeIn('fast');
@@ -168,7 +205,7 @@ $(document).ready(function(){
 		q = htmlEncode(q);
 
     if(!q) {
-      q = "thanksgiving";
+      q = "christmas";
     }
 
     $(".hashtag").text(q);
