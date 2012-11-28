@@ -163,12 +163,8 @@ $(document).ready(function(){
 	var loop = function() {
 		(index == ig_posts.length - 1) ? index = 0 : index++;
 
-    console.log("Index: " + index);
-    console.log("Posts: " + ig_posts.length);
-
     if( (index == ig_posts.length - 3) && (next_page) ) {
       search_instagram(null, next_page, null);
-      console.log("Getting more posts");
     }
 
 		//Fade out the curtain then fade in content
