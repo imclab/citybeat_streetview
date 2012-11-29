@@ -59,7 +59,6 @@ $(document).ready(function(){
 		$.jsonp({
       url: instagram_api,
       success: function(data) {
-        console.log(data);
 
         if(data.meta.code != 200) {
           console.log("Error occured: " + JSON.stringify(data.meta));
@@ -88,7 +87,6 @@ $(document).ready(function(){
       },
       error: function(d,msg) {
         console.log("Error occured: " + msg);
-        console.log(d);
         report_error(msg);
       }
 		});
