@@ -31,8 +31,8 @@ $(document).ready(function(){
   function report_error(error) {
     console.log("Error occured: " + error);
     if(ig_posts.length == 0) {
-      $("#error-info").html(error);
-      $("#error-info").css('display', 'block');
+      /*$("#error-info").html(error);*/
+      $("#error-div").css('display', 'block');
     }
   }
 
@@ -42,22 +42,33 @@ $(document).ready(function(){
 		if(next_url) {
 			instagram_api = next_url + "&callback=?";
 		} else {
-			var client_id = '01b5b09214bd44fd90d4ed10b808d0ec';
+			var  client_id;
+      var rand = Math.floor(Math.random()*3);
+      if(rand == 0) {
+        client_id = '01b5b09214bd44fd90d4ed10b808d0ec';
+      } else if (rand == 1) {
+        client_id = '40e2d1ed8bd448c883b618bd2b590afc';
+      } else { 
+        client_id = '204de200af5043eeb1ece105eaea9166';
+      }
+
 			instagram_api = "https://api.instagram.com/v1/tags/" + tag +
 				"/media/recent?client_id=" + client_id + "&callback=?";
 		}
 
-		$.ajax({
+		$.jsonp({
       url: instagram_api,
-      type: 'GET',
-      dataType: 'jsonp',
       success: function(data) {
+        console.log(data);
+
+        if(data.meta.code != 200) {
+          console.log("Error occured: " + JSON.stringify(data.meta));
+          report_error(JSON.stringify(data.meta));
+          return;
+        }
+
         parse_instagram(data, function() {
 
-          if(data.meta.code != 200) {
-            console.log("Error occured: " + JSON.stringify(data.meta));
-            report_error(JSON.stringify(data.meta));
-          }
 
           //Only call CB once, if you have at least one post or there are no more pages
           if( (ig_posts.length >= 1 && cb) || (!data.pagination.next_url && cb) ) {
@@ -75,9 +86,10 @@ $(document).ready(function(){
           }
         });
       },
-      error: function() {
-        console.log("Error occured!");
-        report_error();
+      error: function(d,msg) {
+        console.log("Error occured: " + msg);
+        console.log(d);
+        report_error(msg);
       }
 		});
 	}

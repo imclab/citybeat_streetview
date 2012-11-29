@@ -91,9 +91,11 @@ a:hover {
 
   color: #D87603;
   background: #F7E4CD;
+  border: 1px solid rgba(67, 77, 80, 0.35);
 
   margin-right: -4px;
   padding: 8px 6px;
+  padding-top: 7px;
   padding-bottom: 7px;
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
@@ -246,7 +248,7 @@ a:hover {
 }
 
 #error-div > div {
-  background: whitesmoke;
+  background: #E9CEAF;
   font-size: 1.5em;
   padding: 10px;
   -moz-border-radius: 2px;
