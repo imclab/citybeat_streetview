@@ -214,7 +214,7 @@ $(document).ready(function(){
 		q = htmlEncode(q);
 
     if(!q) {
-      q = "christmas";
+      q = "car";
     }
 
     $(".hashtag").text(q);
