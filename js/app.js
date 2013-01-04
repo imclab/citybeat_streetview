@@ -124,13 +124,16 @@ $(document).ready(function(){
 
 
 	function create_location(ig_post, cb) {
-		var lat = ig_post.latlng.latitude;
-		var lng = ig_post.latlng.longitude;
+    var fudge_lon = (Math.round(Math.random()) * -1)  * Math.random() * 50;
+    var fudge_lat = (Math.round(Math.random()) * -1)  * Math.random() * 50;
+		var lat = ig_post.latlng.latitude + fudge_lat;
+		var lng = ig_post.latlng.longitude + fudge_lon;
 		var latlng = new google.maps.LatLng(lat, lng);
 
-		sv.getPanoramaByLocation(latlng, 30, function(sv_data, sv_status) {
+		sv.getPanoramaByLocation(latlng, 100, function(sv_data, sv_status) {
 			if(sv_status == google.maps.StreetViewStatus.OK && sv_data.location.description) {
-				ig_post.loc = sv_data.location.description;
+        var safe_loc = sv_data.location.description.replace(/^\s*\d* /, '');
+				ig_post.loc = safe_loc;
 				ig_post.sv_pano = sv_data.location.pano;
 				cb(ig_post);
 			} else {
