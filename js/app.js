@@ -228,11 +228,8 @@ $(document).ready(function(){
 		});
 	};
 
-	$(".toggleModal").live("click", function() {
-		clearTimeout(timer);
-		$("#change_modal").fadeToggle(500, "linear"); 
-	});
+  initialize();
 
-  report_error();
+  query();
 
 });
