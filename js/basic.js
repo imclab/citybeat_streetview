@@ -12,13 +12,20 @@
  */
 
 jQuery(function ($) {
-	// Load dialog on page load
-	//$('#basic-modal-content').modal();
 
-	// Load dialog on click
-	$('#about').click(function (e) {
-		$('#basic-modal-content').modal();
+  // Load dialog on click
+  $('#about').click(function (e) {
+    $('#about-modal-text').show();
+    $('#privacy-modal-text').hide();
+    $('#basic-modal-content').modal();
+  
+    return false;
+  });
 
-		return false;
-	});
+  $('#privacy').click(function (e) {
+    $('#about-modal-text').hide();
+    $('#privacy-modal-text').show();
+    $('#basic-modal-content').modal();
+    return false;
+  });
 });

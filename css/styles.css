@@ -190,7 +190,8 @@ a:hover {
 	margin-right: 2px;
 	margin-left: 2px;
 }
-#about {
+
+#about, #privacy {
 	text-decoration: none;
 	font-weight: 400;
 }
