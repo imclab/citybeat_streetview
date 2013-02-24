@@ -214,7 +214,7 @@ $(document).ready(function(){
 		q = htmlEncode(q);
 
     if(!q) {
-      q = "car";
+      q = "spring";
     }
 
     $(".hashtag").text(q);
