@@ -48,7 +48,7 @@ a:hover {
   font-size: 12px;
   width: 100%;
   /*line-height: 1.5em;*/
-  background-color: #d87603;
+  background-color: rgb(61, 61, 61);
   border-bottom: 1px solid black;
   /*color: #7F7F7F;*/
 	color: white;
@@ -234,8 +234,7 @@ a:hover {
   height: 100%;
   background-color: #111;
   z-index: 10;
-  /*background-image: url('images/christmas_pattern.jpg');*/
-  background-image: url('../images/leaves.png');
+  background-image: url('../images/debut_dark.png');
 }
 
 #error-div {

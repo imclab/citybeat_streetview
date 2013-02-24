@@ -233,8 +233,6 @@ $(document).ready(function(){
 		$("#change_modal").fadeToggle(500, "linear"); 
 	});
 
-	initialize();
-
-	query();
+  report_error();
 
 });
